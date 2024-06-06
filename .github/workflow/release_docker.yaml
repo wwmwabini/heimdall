@@ -1,0 +1,58 @@
+name: Create Release and Build Docker Image for HeimdallData
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    environment:
+      name: semantic-release
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Required for full commit history
+      - name: Python Semantic Release
+        uses: python-semantic-release/python-semantic-release@master
+        with:
+          github_token: ${{ secrets.WORKFLOW_GITHUB_TOKEN }}
+
+  build:
+    needs: release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Get latest release
+        id: get_latest_release
+        run: |
+          latest_release=$(curl -s -H "Authorization: token ${{ secrets.WORKFLOW_GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+          echo "Latest release tag: $latest_release"
+          echo "::set-output name=release_number::$latest_release"
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN  }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          file: Dockerfile
+          tags: wwmwabini/heimdalldata:${{ steps.get_latest_release.outputs.release_number }}
+          labels: ${{ steps.meta.outputs.labels }}

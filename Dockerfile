@@ -8,7 +8,6 @@
 # docker run -d --name heimdallproxy1  --network heimdall --memory=4g -v /opt/heimdall/configcache:/opt/heimdall/configcache -e hduser='admin' -e hdpassword='some password' -e hdRole='proxy' -e vdbName='proxy-vdb' -e configcache='/opt/heimdall/configcache' -p 3306 -p 5432 -p 1433 heimdall:20.06.21.1
 
 FROM ubuntu:latest
-#FROM amazonlinux:latest
 
 # for the Heimdall UI, only needed for the management server
 EXPOSE 8087
@@ -24,4 +23,4 @@ RUN apt-get -y update && apt-get install -y curl unzip
 RUN curl -o /opt/heimdall.zip http://s3.heimdalldata.com/heimdall.zip
 RUN unzip /opt/heimdall.zip
 
-CMD ["/opt/heimdall/heimdall-entrypoint.sh"]
+#CMD ["/opt/heimdall/heimdall-entrypoint.sh"]

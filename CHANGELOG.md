@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## v0.0.2 (2024-07-20)
+
+### Fix
+
+* fix: container start
+
+fix: container start ([`65f3645`](https://github.com/wwmwabini/heimdall/commit/65f3645cc6d1a0d64a1627992115e3f87a6df263))
+
+* fix: container start ([`34bcfd6`](https://github.com/wwmwabini/heimdall/commit/34bcfd6ab28e371a0198594030af8839a69be313))
+
 ## v0.0.1 (2024-07-20)
 
 ### Fix

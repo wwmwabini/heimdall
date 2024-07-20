@@ -18,8 +18,9 @@ EXPOSE 5432
 EXPOSE 3306
 EXPOSE 1433
 
-RUN apt-get -y update && apt-get install -y curl
-#RUN yum -y install curl
-RUN bash -c 'bash <(curl https://s3.amazonaws.com/s3.heimdalldata.com/hdinstall.sh) server'
+RUN apt-get -y update && apt-get install -y curl unzip
+#RUN bash -c 'bash <(curl https://s3.amazonaws.com/s3.heimdalldata.com/hdinstall.sh) server'
+RUN curl -o /opt/heimdall.zip http://s3.heimdalldata.com/heimdall.zip
+RUN unzip /opt/heimdall.zip
 
 CMD ["/opt/heimdall/heimdall-entrypoint.sh"]
